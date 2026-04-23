@@ -6,11 +6,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "artworks")
 public class Image {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String url;
@@ -27,4 +26,11 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+
+    private String path;
+
+
+
+    public void setPath(String path) { this.path = path; }
+    public void setHash(String hash) { this.hash = hash; }
 }
