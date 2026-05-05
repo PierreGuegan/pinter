@@ -1,15 +1,14 @@
 package com.project.pinter.controller;
 
+import com.project.pinter.dto.ImageDto;
 import com.project.pinter.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
+import java.util.List;
 import java.util.UUID;
-
-import com.project.pinter.entities.Image;
 
 @RestController
 @RequestMapping("/images")
@@ -19,7 +18,7 @@ public class ImageController {
     private ImageService imageService;
 
     @PostMapping
-    public ResponseEntity<Image> upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ImageDto> upload(@RequestParam("file") MultipartFile file) {
         try {
             return ResponseEntity.ok(imageService.uploadImage(file));
         } catch (Exception e) {
@@ -28,11 +27,16 @@ public class ImageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Image> getImage(@PathVariable UUID id) {
+    public ResponseEntity<ImageDto> getImage(@PathVariable UUID id) {
         try {
             return ResponseEntity.ok(imageService.getImage(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ImageDto>> getAll() {
+        return ResponseEntity.ok(imageService.getAllImages());
     }
 }

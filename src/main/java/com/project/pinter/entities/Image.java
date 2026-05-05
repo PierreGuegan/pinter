@@ -17,8 +17,6 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String url;
-
     private String title;
 
     @Column(length = 1000)
@@ -27,6 +25,13 @@ public class Image {
     private String hash;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    public UUID getId() { return id; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public String getHash() { return hash; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public String getPath() { return path; }
 
 
 
@@ -41,4 +46,6 @@ public class Image {
 
     public void setPath(String path) { this.path = path; }
     public void setHash(String hash) { this.hash = hash; }
+    public void setTitle(String title) {this.title = title; }
+    public void setDescription(String description) {this.description = description; }
 }
