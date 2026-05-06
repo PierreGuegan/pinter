@@ -26,4 +26,11 @@ public class ImageMetadata {
     @OneToOne
     @JoinColumn(name = "image_id", unique = true)
     private Image image;
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+
+
+    public void setImage(Image image) { this.image = image; }
+    public void setRawExif(String rawExif) { this.rawExif = rawExif; }
 }

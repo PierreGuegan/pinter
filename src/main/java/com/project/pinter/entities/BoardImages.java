@@ -1,11 +1,16 @@
-/*package com.project.pinter.entities;
+package com.project.pinter.entities;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
-@Table(name = "board_images")
-@IdClass(BoardImageId.class)
+@DiscriminatorValue("BOARD")
 public class BoardImages {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Id
     @ManyToOne
@@ -14,4 +19,6 @@ public class BoardImages {
     @Id
     @ManyToOne
     private Image image;
-}*/
+
+
+}

@@ -1,19 +1,21 @@
 package com.project.pinter.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "artworks")
 public class Image {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    private String url;
 
     private String title;
 
@@ -24,7 +26,26 @@ public class Image {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    public UUID getId() { return id; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public String getHash() { return hash; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public String getPath() { return path; }
+
+
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
+    @JsonIgnore
     private User owner;
+
+    private String path;
+
+
+
+    public void setPath(String path) { this.path = path; }
+    public void setHash(String hash) { this.hash = hash; }
+    public void setTitle(String title) {this.title = title; }
+    public void setDescription(String description) {this.description = description; }
 }
