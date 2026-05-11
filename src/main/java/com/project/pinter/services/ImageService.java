@@ -1,12 +1,10 @@
 package com.project.pinter.services;
 
 import com.project.pinter.dto.ImageDto;
-import com.project.pinter.entities.BoardImages;
-import com.project.pinter.entities.BoardImages;
 import com.project.pinter.entities.Image;
-import com.project.pinter.entities.ImageMetadata;
 import com.project.pinter.repositories.ImageMetadataRepository;
 import com.project.pinter.repositories.ImageRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,15 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.security.MessageDigest;
+
 import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import com.project.pinter.entities.Image;
 
 @Service
 public class ImageService {
@@ -37,38 +32,62 @@ public class ImageService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-
-
     public ImageDto uploadImage(MultipartFile file) throws Exception {
 
-        // 1. Nom du fichier
-        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        // Vérification fichier vide
+        if (file.isEmpty()) {
+            throw new RuntimeException("File is empty");
+        }
 
-        // 2. Stockage physique
-        Path path = Paths.get("uploads/" + fileName);
+        // Vérification type MIME
+        if (file.getContentType() == null ||
+                !file.getContentType().startsWith("image/")) {
 
-        Files.createDirectories(path.getParent());
-        Files.write(path, file.getBytes());
+            throw new RuntimeException("Invalid file type");
+        }
 
-        // 3. Hash
+        // Nettoyage nom fichier
+        String originalName = Paths.get(file.getOriginalFilename())
+                .getFileName()
+                .toString();
+
+        // Nom unique
+        String fileName = UUID.randomUUID() + "_" + originalName;
+
+        // Dossier uploads
+        Path uploadPath = Paths.get("/app/uploads");
+
+        // Création dossier si absent
+        Files.createDirectories(uploadPath);
+
+        // Chemin final
+        Path filePath = uploadPath.resolve(fileName);
+
+        // Sauvegarde physique
+        Files.write(filePath, file.getBytes());
+
+        // Génération hash SHA-256
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
         byte[] hashBytes = digest.digest(file.getBytes());
+
         String hash = HexFormat.of().formatHex(hashBytes);
 
-        // 4. Entity
-        Image image = new Image();
-
+        // Chemin relatif stocké en BDD
         String relativePath = "/uploads/" + fileName;
+
+        // Création entity
+        Image image = new Image();
 
         image.setPath(relativePath);
         image.setHash(hash);
-        image.setTitle(file.getOriginalFilename());
+        image.setTitle(originalName);
         image.setDescription("Uploaded image");
 
+        // Sauvegarde BDD
         imageRepository.save(image);
 
-        imageRepository.save(image);
-
+        // Retour DTO
         return toDto(image);
     }
 
@@ -82,6 +101,7 @@ public class ImageService {
         dto.setHash(image.getHash());
         dto.setCreatedAt(image.getCreatedAt());
 
+        // URL publique complète
         dto.setUrl(baseUrl + image.getPath());
 
         return dto;
@@ -96,6 +116,7 @@ public class ImageService {
     }
 
     public List<ImageDto> getAllImages() {
+
         return imageRepository.findAll()
                 .stream()
                 .map(this::toDto)
