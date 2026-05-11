@@ -34,6 +34,8 @@ public class ImageService {
 
     public ImageDto uploadImage(MultipartFile file) throws Exception {
 
+
+
         // Vérification fichier vide
         if (file.isEmpty()) {
             throw new RuntimeException("File is empty");
@@ -72,6 +74,12 @@ public class ImageService {
         byte[] hashBytes = digest.digest(file.getBytes());
 
         String hash = HexFormat.of().formatHex(hashBytes);
+
+        Image existing = imageRepository.findByHash(hash);
+
+        if (existing != null) {
+            return toDto(existing);
+        }
 
         // Chemin relatif stocké en BDD
         String relativePath = "/uploads/" + fileName;
