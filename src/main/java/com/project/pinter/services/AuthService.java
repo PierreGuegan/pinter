@@ -20,18 +20,17 @@ public class AuthService {
     @Autowired
     private JwtService jwtService;
 
-    public void register(RegisterRequest req) {
-        System.out.println("REGISTER START");
+    public String register(RegisterRequest req) {
 
         User user = new User();
+
         user.setUsername(req.username);
         user.setEmail(req.email);
         user.setPassword(passwordEncoder.encode(req.password));
 
         userRepository.save(user);
 
-        System.out.println("USER SAVED");
-        System.out.println("EMAIL RAW = [" + req.email + "]");
+        return jwtService.generateToken(user.getEmail());
     }
 
     public String login(LoginRequest req) {

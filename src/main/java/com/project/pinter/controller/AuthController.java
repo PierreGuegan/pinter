@@ -25,9 +25,11 @@ public class AuthController {
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public void register(@RequestBody RegisterRequest req) {
-        System.out.println(">>> REGISTER CONTROLLER HIT");
-        authService.register(req);
+    public AuthResponse register(@RequestBody RegisterRequest req) {
+
+        String token = authService.register(req);
+
+        return new AuthResponse(token);
     }
 
     @PostMapping("/login")
