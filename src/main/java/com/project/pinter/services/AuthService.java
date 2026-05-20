@@ -21,6 +21,7 @@ public class AuthService {
     private JwtService jwtService;
 
     public void register(RegisterRequest req) {
+        System.out.println("REGISTER START");
 
         User user = new User();
         user.setUsername(req.username);
@@ -28,6 +29,8 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(req.password));
 
         userRepository.save(user);
+
+        System.out.println("USER SAVED");
     }
 
     public String login(LoginRequest req) {
@@ -41,4 +44,6 @@ public class AuthService {
 
         return jwtService.generateToken(user.getEmail());
     }
+
+
 }
