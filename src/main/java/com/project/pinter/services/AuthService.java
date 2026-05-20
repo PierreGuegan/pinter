@@ -31,6 +31,7 @@ public class AuthService {
         userRepository.save(user);
 
         System.out.println("USER SAVED");
+        System.out.println("EMAIL RAW = [" + req.email + "]");
     }
 
     public String login(LoginRequest req) {
@@ -43,6 +44,7 @@ public class AuthService {
         }
 
         return jwtService.generateToken(user.getEmail());
+
     }
 
 
