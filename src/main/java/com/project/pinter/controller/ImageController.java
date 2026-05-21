@@ -58,4 +58,11 @@ public class ImageController {
     public ResponseEntity<List<ImageDto>> getAll() {
         return ResponseEntity.ok(imageService.getAllImages());
     }
+
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ImageDto>> search(@RequestParam String q) {
+        return ResponseEntity.ok(imageService.searchImages(q));
+    }
 }
+

@@ -213,4 +213,18 @@ public class ImageService {
         // 7. delete DB
         imageRepository.delete(image);
     }
+
+    public List<ImageDto> searchImages(String query) {
+
+        if (query == null || query.isBlank()) {
+            return getAllImages();
+        }
+
+        return imageRepository.search(query)
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+
 }
