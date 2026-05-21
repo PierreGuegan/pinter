@@ -8,6 +8,7 @@ import com.project.pinter.repositories.LikeRepository;
 import com.project.pinter.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ import java.util.UUID;
         @Autowired
         private JwtService jwtService;
 
+        @Transactional
         public void toggleLike(String authHeader, UUID imageId) {
 
             String token = authHeader.replace("Bearer ", "");
