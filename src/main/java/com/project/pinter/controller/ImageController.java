@@ -18,9 +18,13 @@ public class ImageController {
     private ImageService imageService;
 
     @PostMapping
-    public ResponseEntity<ImageDto> upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ImageDto> upload(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("title") String title,
+            @RequestParam("description") String description
+    ) {
         try {
-            return ResponseEntity.ok(imageService.uploadImage(file));
+            return ResponseEntity.ok(imageService.uploadImage(file, title, description));
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }

@@ -32,7 +32,7 @@ public class ImageService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    public ImageDto uploadImage(MultipartFile file) throws Exception {
+    public ImageDto uploadImage(MultipartFile file, String title, String description) throws Exception {
 
 
 
@@ -89,8 +89,8 @@ public class ImageService {
 
         image.setPath(relativePath);
         image.setHash(hash);
-        image.setTitle(originalName);
-        image.setDescription("Uploaded image");
+        image.setTitle(title);
+        image.setDescription(description);
 
         // Sauvegarde BDD
         imageRepository.save(image);
