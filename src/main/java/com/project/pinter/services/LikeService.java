@@ -56,5 +56,19 @@ import java.util.UUID;
                     .orElseThrow();
             return likeRepository.countByImage(image);
         }
+
+        public boolean isLikedByMe(String authHeader, UUID imageId) {
+
+            String token = authHeader.replace("Bearer ", "");
+            String email = jwtService.extractEmail(token);
+
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            Image image = imageRepository.findById(imageId)
+                    .orElseThrow(() -> new RuntimeException("Image not found"));
+
+            return likeRepository.existsByUserAndImage(user, image);
+        }
     }
 

@@ -13,4 +13,6 @@ public interface LikeRepository extends JpaRepository<Like, LikeId> {
     boolean existsByUserAndImage(User user, Image image);
 
     void deleteByUserAndImage(User user, Image image);
+
+
 }
