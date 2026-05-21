@@ -23,4 +23,16 @@ public class Comment {
 
     @ManyToOne
     private Image image;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

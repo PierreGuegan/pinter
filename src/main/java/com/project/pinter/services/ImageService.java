@@ -24,6 +24,9 @@ import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
 
+import com.project.pinter.repositories.LikeRepository;
+import com.project.pinter.repositories.CommentRepository;
+
 @Service
 public class ImageService {
 
@@ -41,6 +44,12 @@ public class ImageService {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private LikeRepository likeRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     public ImageDto uploadImage(
             String authHeader,
@@ -160,6 +169,9 @@ public class ImageService {
 
             dto.setOwner(ownerDto);
         }
+
+        dto.setLikeCount(likeRepository.countByImage(image));
+        dto.setCommentCount(commentRepository.countByImage(image));
 
         return dto;
     }

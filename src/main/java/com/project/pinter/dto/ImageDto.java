@@ -12,6 +12,9 @@ public class ImageDto {
     private LocalDateTime createdAt;
     private String url;
     private UserDto owner;
+    private long likeCount;
+    private long commentCount;
+    private boolean likedByCurrentUser;
 
     // getters & setters
 
@@ -79,5 +82,29 @@ public class ImageDto {
 
     public void setOriginalArtist(String originalArtist) {
         this.originalArtist = originalArtist;
+    }
+
+    public long getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public long getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(long commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public boolean isLikedByCurrentUser() {
+        return likedByCurrentUser;
+    }
+
+    public void setLikedByCurrentUser(boolean likedByCurrentUser) {
+        this.likedByCurrentUser = likedByCurrentUser;
     }
 }
