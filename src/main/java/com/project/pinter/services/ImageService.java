@@ -46,7 +46,8 @@ public class ImageService {
             String authHeader,
             MultipartFile file,
             String title,
-            String description
+            String description,
+            String originalArtist
     ) throws Exception {
 
 
@@ -105,6 +106,7 @@ public class ImageService {
         image.setHash(hash);
         image.setTitle(title);
         image.setDescription(description);
+        image.setOriginalArtist(originalArtist);
 
 
         // EXTRACTION TOKEN
@@ -144,6 +146,7 @@ public class ImageService {
         dto.setDescription(image.getDescription());
         dto.setHash(image.getHash());
         dto.setCreatedAt(image.getCreatedAt());
+        dto.setOriginalArtist(image.getOriginalArtist());
 
         dto.setUrl(baseUrl + image.getPath());
 

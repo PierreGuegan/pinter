@@ -26,6 +26,8 @@ public class Image {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    private String originalArtist;
+
     public UUID getId() { return id; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
@@ -38,6 +40,14 @@ public class Image {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public String getOriginalArtist() {
+        return originalArtist;
+    }
+
+    public void setOriginalArtist(String originalArtist) {
+        this.originalArtist = originalArtist;
     }
 
 

@@ -22,10 +22,11 @@ public class ImageController {
             @RequestHeader("Authorization") String authHeader,
             @RequestParam("file") MultipartFile file,
             @RequestParam("title") String title,
-            @RequestParam("description") String description
+            @RequestParam("description") String description,
+            @RequestParam("originalArtist") String originalArtist
     ) {
         try {
-            return ResponseEntity.ok(imageService.uploadImage(authHeader, file, title, description));
+            return ResponseEntity.ok(imageService.uploadImage(authHeader, file, title, description, originalArtist));
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }

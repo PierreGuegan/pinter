@@ -70,4 +70,14 @@ public class ImageDto {
     public void setOwner(UserDto owner) {
         this.owner = owner;
     }
+
+    private String originalArtist;
+
+    public String getOriginalArtist() {
+        return originalArtist;
+    }
+
+    public void setOriginalArtist(String originalArtist) {
+        this.originalArtist = originalArtist;
+    }
 }
