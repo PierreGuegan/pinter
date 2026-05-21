@@ -32,7 +32,13 @@ public class Image {
     public String getHash() { return hash; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public String getPath() { return path; }
+    public User getOwner() {
+        return owner;
+    }
 
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
 
     @ManyToOne
@@ -48,4 +54,5 @@ public class Image {
     public void setHash(String hash) { this.hash = hash; }
     public void setTitle(String title) {this.title = title; }
     public void setDescription(String description) {this.description = description; }
+
 }

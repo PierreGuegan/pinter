@@ -1,10 +1,12 @@
 package com.project.pinter.services;
 
 import com.project.pinter.dto.ImageDto;
+import com.project.pinter.dto.UserDto;
 import com.project.pinter.entities.Image;
 import com.project.pinter.repositories.ImageMetadataRepository;
 import com.project.pinter.repositories.ImageRepository;
 
+import com.project.pinter.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,8 +32,14 @@ public class ImageService {
     @Autowired
     private ImageMetadataRepository metadataRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Value("${app.base-url}")
     private String baseUrl;
+
+    @Autowired
+    private JwtService jwtService;
 
     public ImageDto uploadImage(MultipartFile file, String title, String description) throws Exception {
 
@@ -116,8 +124,18 @@ public class ImageService {
         dto.setHash(image.getHash());
         dto.setCreatedAt(image.getCreatedAt());
 
-        // URL publique complète
         dto.setUrl(baseUrl + image.getPath());
+
+        // OWNER DTO
+        if (image.getOwner() != null) {
+
+            UserDto ownerDto = new UserDto();
+
+            ownerDto.setId(image.getOwner().getId());
+            ownerDto.setUsername(image.getOwner().getUsername());
+
+            dto.setOwner(ownerDto);
+        }
 
         return dto;
     }
