@@ -7,6 +7,7 @@ import com.project.pinter.repositories.ImageRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -94,6 +95,10 @@ public class ImageService {
 
         // Sauvegarde BDD
         imageRepository.save(image);
+
+        System.out.println("IMAGE UPLOADEE");
+        System.out.println("AUTH = " + SecurityContextHolder.getContext().getAuthentication());
+        System.out.println("PRINCIPAL = " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // Retour DTO
         return toDto(image);
