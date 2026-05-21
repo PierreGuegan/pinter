@@ -110,14 +110,14 @@ public class ImageService {
         // EXTRACTION TOKEN
         String token = authHeader.replace("Bearer ", "");
 
-// EXTRACTION EMAIL
+        // EXTRACTION EMAIL
         String email = jwtService.extractEmail(token);
 
-// RECUP USER
+        // RECUP USER
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-// ASSOCIER OWNER
+        // ASSOCIER OWNER
         image.setOwner(user);
 
         System.out.println("USER = " + user.getUsername());
@@ -175,5 +175,39 @@ public class ImageService {
                 .stream()
                 .map(this::toDto)
                 .toList();
+    }
+
+    public void deleteImage(String authHeader, UUID imageId) {
+
+        // 1. extract token
+        String token = authHeader.replace("Bearer ", "");
+
+        // 2. extract email
+        String email = jwtService.extractEmail(token);
+
+        // 3. find user
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 4. find image
+        Image image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new RuntimeException("Image not found"));
+
+        // 5. check ownership
+        if (image.getOwner() == null ||
+                !image.getOwner().getId().equals(user.getId())) {
+            throw new RuntimeException("Not allowed");
+        }
+
+        // 6. delete file physically (optionnel mais propre)
+        try {
+            Path path = Paths.get("/app" + image.getPath());
+            Files.deleteIfExists(path);
+        } catch (Exception e) {
+            System.out.println("File deletion error: " + e.getMessage());
+        }
+
+        // 7. delete DB
+        imageRepository.delete(image);
     }
 }

@@ -40,6 +40,19 @@ public class ImageController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteImage(
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable UUID id
+    ) {
+        try {
+            imageService.deleteImage(authHeader, id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(403).build();
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<ImageDto>> getAll() {
         return ResponseEntity.ok(imageService.getAllImages());
