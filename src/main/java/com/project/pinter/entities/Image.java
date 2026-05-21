@@ -34,7 +34,6 @@ public class Image {
     public String getPath() { return path; }
 
 
-
     @ManyToOne
     @JoinColumn(name = "owner_id")
     @JsonIgnore
@@ -48,4 +47,7 @@ public class Image {
     public void setHash(String hash) { this.hash = hash; }
     public void setTitle(String title) {this.title = title; }
     public void setDescription(String description) {this.description = description; }
+
+    public void setOwner(User user) {
+    }
 }

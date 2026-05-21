@@ -20,6 +20,9 @@ import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.project.pinter.entities.User;
+
 @Service
 public class ImageService {
 
@@ -32,8 +35,9 @@ public class ImageService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    public ImageDto uploadImage(MultipartFile file, String title, String description) throws Exception {
 
+
+    public ImageDto uploadImage(MultipartFile file, String title, String description) throws Exception {
 
 
         // Vérification fichier vide
@@ -46,6 +50,14 @@ public class ImageService {
                 !file.getContentType().startsWith("image/")) {
 
             throw new RuntimeException("Invalid file type");
+        }
+
+
+        // RÉCUPÉRATION USER CONNECTÉ
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!(principal instanceof User user)) {
+            throw new RuntimeException("User not authenticated");
         }
 
         // Nettoyage nom fichier
@@ -91,6 +103,7 @@ public class ImageService {
         image.setHash(hash);
         image.setTitle(title);
         image.setDescription(description);
+        image.setOwner(user);
 
         // Sauvegarde BDD
         imageRepository.save(image);
