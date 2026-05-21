@@ -108,8 +108,13 @@ public class ImageService {
         // Sauvegarde BDD
         imageRepository.save(image);
 
+        System.out.println("AUTH = " + SecurityContextHolder.getContext().getAuthentication());
+        System.out.println("PRINCIPAL = " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
         // Retour DTO
         return toDto(image);
+
+
     }
 
     private ImageDto toDto(Image image) {
