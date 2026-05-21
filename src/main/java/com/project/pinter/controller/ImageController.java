@@ -19,12 +19,13 @@ public class ImageController {
 
     @PostMapping
     public ResponseEntity<ImageDto> upload(
+            @RequestHeader("Authorization") String authHeader,
             @RequestParam("file") MultipartFile file,
             @RequestParam("title") String title,
             @RequestParam("description") String description
     ) {
         try {
-            return ResponseEntity.ok(imageService.uploadImage(file, title, description));
+            return ResponseEntity.ok(imageService.uploadImage(authHeader, file, title, description));
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }

@@ -3,6 +3,7 @@ package com.project.pinter.services;
 import com.project.pinter.dto.ImageDto;
 import com.project.pinter.dto.UserDto;
 import com.project.pinter.entities.Image;
+import com.project.pinter.entities.User;
 import com.project.pinter.repositories.ImageMetadataRepository;
 import com.project.pinter.repositories.ImageRepository;
 
@@ -41,8 +42,12 @@ public class ImageService {
     @Autowired
     private JwtService jwtService;
 
-    public ImageDto uploadImage(MultipartFile file, String title, String description) throws Exception {
-
+    public ImageDto uploadImage(
+            String authHeader,
+            MultipartFile file,
+            String title,
+            String description
+    ) throws Exception {
 
 
         // Vérification fichier vide
@@ -100,6 +105,22 @@ public class ImageService {
         image.setHash(hash);
         image.setTitle(title);
         image.setDescription(description);
+
+
+        // EXTRACTION TOKEN
+        String token = authHeader.replace("Bearer ", "");
+
+// EXTRACTION EMAIL
+        String email = jwtService.extractEmail(token);
+
+// RECUP USER
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+// ASSOCIER OWNER
+        image.setOwner(user);
+
+        System.out.println("USER = " + user.getUsername());
 
         // Sauvegarde BDD
         imageRepository.save(image);
