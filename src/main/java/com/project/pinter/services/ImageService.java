@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
@@ -50,6 +51,8 @@ public class ImageService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+
 
     public ImageDto uploadImage(
             String authHeader,
@@ -170,8 +173,6 @@ public class ImageService {
             dto.setOwner(ownerDto);
         }
 
-        dto.setLikeCount(likeRepository.countByImage(image));
-        dto.setCommentCount(commentRepository.countByImage(image));
 
         return dto;
     }
@@ -192,6 +193,7 @@ public class ImageService {
                 .toList();
     }
 
+    @Transactional
     public void deleteImage(String authHeader, UUID imageId) {
 
         // 1. extract token
@@ -222,7 +224,11 @@ public class ImageService {
             System.out.println("File deletion error: " + e.getMessage());
         }
 
-        // 7. delete DB
+        // 7. delete relations first (IMPORTANT)
+        commentRepository.deleteAllByImageId(imageId);
+        likeRepository.deleteAllByImageId(imageId);
+
+        // 8. delete image
         imageRepository.delete(image);
     }
 
