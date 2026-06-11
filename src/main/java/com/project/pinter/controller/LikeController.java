@@ -32,6 +32,20 @@ public class LikeController {
             @RequestHeader("Authorization") String authHeader,
             @PathVariable UUID imageId
     ) {
-        return ResponseEntity.ok(likeService.isLikedByMe(authHeader, imageId));
+
+        try {
+
+            boolean result = likeService.isLikedByMe(authHeader, imageId);
+
+            System.out.println("LIKED RESULT = " + result);
+
+            return ResponseEntity.ok(result);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            throw e;
+        }
     }
 }
