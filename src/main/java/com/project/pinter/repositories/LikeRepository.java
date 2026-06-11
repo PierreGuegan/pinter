@@ -16,6 +16,12 @@ import java.util.UUID;
 @Repository
 public interface LikeRepository extends JpaRepository<Like, LikeId> {
 
+    boolean existsByUserAndImage(User user, Image image);
+
+    void deleteByUserAndImage(User user, Image image);
+
+    long countByImage(Image image);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM Like l WHERE l.image.id = :imageId")

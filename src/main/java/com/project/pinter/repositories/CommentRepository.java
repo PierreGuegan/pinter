@@ -15,6 +15,10 @@ import java.util.UUID;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, UUID> {
 
+    List<Comment> findByImageOrderByCreatedAtDesc(Image image);
+
+    long countByImage(Image image);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM Comment c WHERE c.image.id = :imageId")
