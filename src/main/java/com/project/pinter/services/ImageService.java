@@ -4,14 +4,13 @@ import com.project.pinter.dto.ImageDto;
 import com.project.pinter.dto.UserDto;
 import com.project.pinter.entities.Image;
 import com.project.pinter.entities.User;
-import com.project.pinter.repositories.ImageMetadataRepository;
-import com.project.pinter.repositories.ImageRepository;
+import com.project.pinter.repositories.*;
 
-import com.project.pinter.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
@@ -41,6 +40,12 @@ public class ImageService {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
 
     public ImageDto uploadImage(
             String authHeader,
@@ -180,6 +185,7 @@ public class ImageService {
                 .toList();
     }
 
+    @Transactional
     public void deleteImage(String authHeader, UUID imageId) {
 
         // 1. extract token
@@ -210,7 +216,11 @@ public class ImageService {
             System.out.println("File deletion error: " + e.getMessage());
         }
 
-        // 7. delete DB
+        // 7. delete relations first
+        commentRepository.deleteAllByImageId(imageId);
+        likeRepository.deleteAllByImageId(imageId);
+
+        // 8. delete image
         imageRepository.delete(image);
     }
 
