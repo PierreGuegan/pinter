@@ -34,4 +34,12 @@ public class CommentController {
     public long count(@PathVariable UUID imageId) {
         return commentService.countComments(imageId);
     }
+
+    @DeleteMapping("/{commentId}")
+    public void deleteComment(
+            @RequestHeader("Authorization") String auth,
+            @PathVariable UUID commentId
+    ) {
+        commentService.deleteComment(auth, commentId);
+    }
 }

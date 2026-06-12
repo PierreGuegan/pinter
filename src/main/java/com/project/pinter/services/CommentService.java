@@ -66,4 +66,23 @@ public class CommentService {
 
         return commentRepository.countByImage(image);
     }
+
+    public void deleteComment(String authHeader, UUID commentId) {
+
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtService.extractEmail(token);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("USER NOT FOUND"));
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("COMMENT NOT FOUND"));
+
+        // 🔒 sécurité : seul l’auteur peut supprimer
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("NOT AUTHORIZED");
+        }
+
+        commentRepository.delete(comment);
+    }
 }
