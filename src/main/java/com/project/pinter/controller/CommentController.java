@@ -1,5 +1,6 @@
 package com.project.pinter.controller;
 
+import com.project.pinter.dto.CommentRequest;
 import com.project.pinter.entities.Comment;
 import com.project.pinter.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ public class CommentController {
     public Comment add(
             @RequestHeader("Authorization") String auth,
             @PathVariable UUID imageId,
-            @RequestBody String content
+            @RequestBody CommentRequest request
     ) {
-        return commentService.addComment(auth, imageId, content);
+        return commentService.addComment(auth, imageId, request.getContent());
     }
 
     @GetMapping("/{imageId}")

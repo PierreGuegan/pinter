@@ -1,8 +1,6 @@
 package com.project.pinter.entities;
 
 import jakarta.persistence.*;
-
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,6 +21,26 @@ public class Comment {
 
     @ManyToOne
     private Image image;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Image getImage() {
+        return image;
+    }
 
     public void setUser(User user) {
         this.user = user;
