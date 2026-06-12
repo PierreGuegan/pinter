@@ -33,10 +33,15 @@ public class CommentService {
         String email = jwtService.extractEmail(token);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("USER NOT FOUND: " + email));
 
         Image image = imageRepository.findById(imageId)
-                .orElseThrow(() -> new RuntimeException("Image not found"));
+                .orElseThrow(() -> new RuntimeException("IMAGE NOT FOUND: " + imageId));
+
+        System.out.println("AUTH HEADER = " + authHeader);
+
+        System.out.println("TOKEN = " + token);
+        System.out.println("EMAIL = " + email);
 
         Comment comment = new Comment();
         comment.setUser(user);
