@@ -12,7 +12,7 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private final String SECRET = "super-secret-key-change-this-super-secret-key-123456";
+    private final String SECRET = "vbcgSd7uOnm9NJ";
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));

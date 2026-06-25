@@ -50,15 +50,12 @@ public class Image {
         this.originalArtist = originalArtist;
     }
 
-
     @ManyToOne
     @JoinColumn(name = "owner_id")
     @JsonIgnore
     private User owner;
 
     private String path;
-
-
 
     public void setPath(String path) { this.path = path; }
     public void setHash(String hash) { this.hash = hash; }

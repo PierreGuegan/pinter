@@ -78,7 +78,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("COMMENT NOT FOUND"));
 
-        // 🔒 sécurité : seul l’auteur peut supprimer
+        // sécurité : seul l’auteur peut supprimer
         if (!comment.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("NOT AUTHORIZED");
         }

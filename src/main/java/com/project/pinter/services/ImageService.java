@@ -145,8 +145,6 @@ public class ImageService {
 
         // Retour DTO
         return toDto(image);
-
-
     }
 
     private ImageDto toDto(Image image) {
@@ -172,8 +170,6 @@ public class ImageService {
 
             dto.setOwner(ownerDto);
         }
-
-
         return dto;
     }
 
@@ -195,27 +191,21 @@ public class ImageService {
 
     @Transactional
     public void deleteImage(String authHeader, UUID imageId) {
-
         // 1. extract token
         String token = authHeader.replace("Bearer ", "");
-
         // 2. extract email
         String email = jwtService.extractEmail(token);
-
         // 3. find user
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
         // 4. find image
         Image image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new RuntimeException("Image not found"));
-
         // 5. check ownership
         if (image.getOwner() == null ||
                 !image.getOwner().getId().equals(user.getId())) {
             throw new RuntimeException("Not allowed");
         }
-
         // 6. delete file physically (optionnel mais propre)
         try {
             Path path = Paths.get("/app" + image.getPath());
@@ -223,11 +213,9 @@ public class ImageService {
         } catch (Exception e) {
             System.out.println("File deletion error: " + e.getMessage());
         }
-
         // 7. delete relations first (IMPORTANT)
         commentRepository.deleteAllByImageId(imageId);
         likeRepository.deleteAllByImageId(imageId);
-
         // 8. delete image
         imageRepository.delete(image);
     }
@@ -243,6 +231,4 @@ public class ImageService {
                 .map(this::toDto)
                 .toList();
     }
-
-
 }
