@@ -62,6 +62,14 @@ public class ImageService {
             String originalArtist
     ) throws Exception {
 
+        // Vérification champs
+        if (title == null || title.isBlank()) {
+            throw new RuntimeException("Title is required");
+        }
+
+        if (originalArtist == null || originalArtist.isBlank()) {
+            throw new RuntimeException("Original artist is required");
+        }
 
         // Vérification fichier vide
         if (file.isEmpty()) {

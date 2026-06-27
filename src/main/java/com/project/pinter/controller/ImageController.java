@@ -28,7 +28,10 @@ public class ImageController {
         try {
             return ResponseEntity.ok(imageService.uploadImage(authHeader, file, title, description, originalArtist));
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            return ResponseEntity
+                    .badRequest()
+                    .header("error-message", e.getMessage())
+                    .build();
         }
     }
 
